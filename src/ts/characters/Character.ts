@@ -674,15 +674,15 @@ export class Character extends THREE.Object3D implements IWorldEntity
         this.controlledObject.allowSleep(false);
         vehicle.inputReceiverInit();
 
-        this.controlledObjectSeat = seat;
-        vehicle.controllingCharacter = this;
+        // this.controlledObjectSeat = seat;
+        // vehicle.controllingCharacter = this;
     }
 
     public exitVehicle(): void
     {
         this.setState(new ExitingVehicle(this, this.controlledObject, this.controlledObjectSeat));
         this.controlledObject.allowSleep(true);
-        this.controlledObject.controllingCharacter = undefined;
+        // this.controlledObject.controllingCharacter = undefined;
         this.controlledObject.resetControls();
         this.controlledObject = undefined;
         this.inputReceiverInit();
@@ -843,10 +843,10 @@ export class Character extends THREE.Object3D implements IWorldEntity
             world.objects.push(this.characterCapsule);
 
             // Shadow cascades
-            this.materials.forEach((mat) =>
-            {
-                world.csm.setupMaterial(mat);
-            });
+            // this.materials.forEach((mat) =>
+            // {
+            //     world.csm.setupMaterial(mat);
+            // });
 
             // world.graphicsWorld.add(this.help1);
             // world.graphicsWorld.add(this.help2);

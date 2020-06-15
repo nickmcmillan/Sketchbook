@@ -2,12 +2,12 @@ import * as THREE from 'three';
 import * as CANNON from 'cannon';
 
 import { CameraOperator } from './CameraOperator';
-import { FXAAShader } from '../../lib/shaders/FXAAShader';
+// import { FXAAShader } from '../../lib/shaders/FXAAShader';
 import EffectComposer, {
     RenderPass,
     ShaderPass,
 } from '@johh/three-effectcomposer';
-import { default as CSM } from '../../lib/utils/three-csm.module.js';
+// import { default as CSM } from '../../lib/utils/three-csm.module.js';
 
 import { WaterShader } from '../../lib/shaders/WaterShader';
 
@@ -23,13 +23,13 @@ import { Sky } from './Sky';
 import { BoxPhysics } from '../objects/object_physics/BoxPhysics';
 import * as Utils from './Utilities';
 import { TrimeshPhysics } from '../objects/object_physics/TrimeshPhysics';
-import { Grass } from '../objects/Grass';
+
 import { Path } from '../objects/Path';
 import { CollisionGroups } from '../enums/CollisionGroups';
 import { LoadingManager } from './LoadingManager';
-import { Car } from '../vehicles/Car';
-import { Airplane } from '../vehicles/Airplane';
 import { Helicopter } from '../vehicles/Helicopter';
+
+import { VehicleSeat } from '../vehicles/VehicleSeat';
 
 export class World
 {
@@ -55,7 +55,7 @@ export class World
     public inputManager: InputManager;
     public cameraOperator: CameraOperator;
     public timeScaleTarget: number;
-    public csm: CSM;
+    // public csm: CSM;
     public loadingManager: LoadingManager;
 
     public objects: SBObject[];
@@ -78,7 +78,8 @@ export class World
 
         // Renderer
         this.renderer = new THREE.WebGLRenderer();
-        this.renderer.setPixelRatio(window.devicePixelRatio);
+        this.renderer.setPixelRatio(1);
+        // this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
         this.renderer.toneMappingExposure = 1.0;
@@ -94,7 +95,7 @@ export class World
             scope.camera['aspect'] = window.innerWidth / window.innerHeight;
             scope.camera['updateProjectionMatrix']();
             scope.renderer.setSize(window.innerWidth, window.innerHeight);
-            effectFXAA.uniforms.resolution.value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
+            // effectFXAA.uniforms.resolution.value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
             scope.composer.setSize(window.innerWidth * dpr, window.innerHeight * dpr);
         }
         window.addEventListener('resize', onWindowResize, false);
@@ -119,27 +120,27 @@ export class World
             ];
         };
 
-        this.csm = new CSM({
-            fov: 80,
-            far: 300,
-            lightIntensity: 2.3,
-            cascades: 4,
-            shadowMapSize: 2048,
-            camera: this.camera,
-            parent: this.graphicsWorld,
-            mode: 'custom',
-            customSplitsCallback: splitsCallback
-        });
+        // this.csm = new CSM({
+        //     fov: 80,
+        //     far: 300,
+        //     lightIntensity: 2.3,
+        //     cascades: 4,
+        //     shadowMapSize: 2048,
+        //     camera: this.camera,
+        //     parent: this.graphicsWorld,
+        //     mode: 'custom',
+        //     customSplitsCallback: splitsCallback
+        // });
 
         // FXAA
-        let effectFXAA = new ShaderPass(FXAAShader);
-        let dpr = (window.devicePixelRatio !== undefined) ? window.devicePixelRatio : 1;
-        effectFXAA.uniforms.resolution.value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
+        // let effectFXAA = new ShaderPass(FXAAShader);
+        let dpr = 1//(window.devicePixelRatio !== undefined) ? window.devicePixelRatio : 1;
+        // effectFXAA.uniforms.resolution.value.set(1 / (window.innerWidth * dpr), 1 / (window.innerHeight * dpr));
 
         // Setup composer
         this.composer = new EffectComposer(this.renderer);
         this.composer.addPass(new RenderPass(this.graphicsWorld, this.camera));
-        this.composer.addPass(effectFXAA);
+        // this.composer.addPass(effectFXAA);
 
         // Physics
         this.physicsWorld = new CANNON.World();
@@ -164,13 +165,13 @@ export class World
 
         // Variables
         let params = {
-            Pointer_Lock: true,
+            Pointer_Lock: false,
             Mouse_Sensitivity: 0.3,
             FPS_Limit: 60,
             Time_Scale: 1,
             Shadows: true,
             FXAA: true,
-            Draw_Physics: false,
+            Draw_Physics: true,
             RayCast_Debug: false,
             Phi: 60,
             Theta: 225,
@@ -235,22 +236,22 @@ export class World
             this['waterMat'].uniforms.iGlobalTime.value += timeStep;
         }
 
-        if (this['grassMat'] !== undefined)
-        {
-            this['grassMat'].uniforms.time.value += timeStep;
+        // if (this['grassMat'] !== undefined)
+        // {
+        //     this['grassMat'].uniforms.time.value += timeStep;
 
-            if (this.characters.length > 0)
-            {
-                this['grassMat'].uniforms.playerPos.value.copy(this.characters[0].position);
-            }
+        //     if (this.characters.length > 0)
+        //     {
+        //         this['grassMat'].uniforms.playerPos.value.copy(this.characters[0].position);
+        //     }
 
-            // console.log(this['grassMat'].uniforms.playerPos.value);
-        }
+        //     // console.log(this['grassMat'].uniforms.playerPos.value);
+        // }
 
         this.sky.update();
 
-        this.csm.update(this.camera.matrix);
-        this.csm.lightDirection = new THREE.Vector3(-this.sky.sun.position.x, -this.sky.sun.position.y, -this.sky.sun.position.z).normalize();
+        // this.csm.update(this.camera.matrix);
+        // this.csm.lightDirection = new THREE.Vector3(-this.sky.sun.position.x, -this.sky.sun.position.y, -this.sky.sun.position.z).normalize();
 
         let awake = 0;
         let sleepy = 0;
@@ -368,33 +369,33 @@ export class World
                 if (child.type === 'Mesh')
                 {
                     Utils.setupMeshProperties(child);
-                    this.csm.setupMaterial(child.material);
+                    // this.csm.setupMaterial(child.material);
 
-                    if (child.material.name === 'grass')
-                    {
-                        let grass = new Grass(child);
-                        this.add(grass);
+                    // if (child.material.name === 'grass')
+                    // {
+                    //     let grass = new Grass(child);
+                    //     this.add(grass);
 
-                        // child.material = grass.groundMaterial;
-                        this['grassMat'] = grass.grassMaterial;
-                    }
+                    //     // child.material = grass.groundMaterial;
+                    //     this['grassMat'] = grass.grassMaterial;
+                    // }
 
-                    if (child.material.name === 'ocean')
-                    {
-                        let uniforms = THREE.UniformsUtils.clone(WaterShader.uniforms);
-                        uniforms.iResolution.value.x = window.innerWidth;
-                        uniforms.iResolution.value.y = window.innerHeight;
+                    // if (child.material.name === 'ocean')
+                    // {
+                    //     let uniforms = THREE.UniformsUtils.clone(WaterShader.uniforms);
+                    //     uniforms.iResolution.value.x = window.innerWidth;
+                    //     uniforms.iResolution.value.y = window.innerHeight;
 
-                        child.material = new THREE.ShaderMaterial({
-                            uniforms: uniforms,
-                            fragmentShader: WaterShader.fragmentShader,
-                            vertexShader: WaterShader.vertexShader,
-                        });
+                    //     child.material = new THREE.ShaderMaterial({
+                    //         uniforms: uniforms,
+                    //         fragmentShader: WaterShader.fragmentShader,
+                    //         vertexShader: WaterShader.vertexShader,
+                    //     });
 
-                        child.material.transparent = true;
+                    //     child.material.transparent = true;
 
-                        this['waterMat'] = child.material;
-                    }
+                    //     this['waterMat'] = child.material;
+                    // }
                 }
 
                 if (child.userData.hasOwnProperty('data'))
@@ -446,47 +447,40 @@ export class World
 
                     if (child.userData.data === 'spawn')
                     {
-                        if (child.userData.type === 'car')
-                        {
-                            this.loadingManager.loadGLTF('build/assets/car.glb', (model: any) =>
-                            {
-                                let car = new Car(model);
-                                car.setPosition(child.position.x, child.position.y + 1, child.position.z);
-                                car.collision.quaternion.copy(Utils.cannonQuat(child.quaternion));
-                                this.add(car);
-                            });
-                        }
-                        else if (child.userData.type === 'airplane')
-                        {
-                            this.loadingManager.loadGLTF('build/assets/airplane.glb', (model: any) =>
-                            {
-                                let airplane = new Airplane(model);
-                                airplane.setPosition(child.position.x, child.position.y + 1, child.position.z);
-                                airplane.collision.quaternion.copy(Utils.cannonQuat(child.quaternion));
-                                this.add(airplane);
-                            });
-                        }
-                        else if (child.userData.type === 'heli')
+                       if (child.userData.type === 'heli')
                         {
                             this.loadingManager.loadGLTF('build/assets/heli.glb', (model: any) =>
                             {
                                 let heli = new Helicopter(model);
-                                heli.setPosition(child.position.x, child.position.y + 1, child.position.z);
+                                heli.setPosition(0, 20, 0);
                                 heli.collision.quaternion.copy(Utils.cannonQuat(child.quaternion));
                                 this.add(heli);
+                                heli.takeControl();
+                                // heli.inputReceiverInit();
+
+
+                                // heli.controllingCharacter = this;
+
+                              // this.controlledObject = vehicle;
+                              // this.controlledObject.allowSleep(false);
+                              // vehicle.inputReceiverInit();
+
+                              // this.controlledObjectSeat = seat;
+                              // vehicle.controllingCharacter = this;
+                                
                             });
                         }
-                        else if (child.userData.type === 'player')
-                        {
-                            this.loadingManager.loadGLTF('build/assets/boxman.glb', (model) =>
-                            {
-                                let player = new Character(model);
-                                player.setPosition(child.position.x, child.position.y, child.position.z);
-                                this.add(player);
-                                player.setOrientation(new THREE.Vector3(1, 0, 0), true);
-                                player.takeControl();
-                            });
-                        }
+                        // else if (child.userData.type === 'player')
+                        // {
+                        //     this.loadingManager.loadGLTF('build/assets/boxman.glb', (model) =>
+                        //     {
+                        //         let player = new Character(model);
+                        //         player.setPosition(child.position.x, child.position.y, child.position.z);
+                        //         this.add(player);
+                        //         player.setOrientation(new THREE.Vector3(1, 0, 0), true);
+                        //         player.takeControl();
+                        //     });
+                        // }
                     }
                 }
             }
@@ -591,22 +585,6 @@ export class World
             .onChange((value) =>
             {
                 scope.timeScaleTarget = value;
-            });
-        graphicsFolder.add(this.params, 'Shadows')
-            .onChange((enabled) =>
-            {
-                if (enabled)
-                {
-                    this.csm.lights.forEach((light) => {
-                        light.castShadow = true;
-                    });
-                }
-                else
-                {
-                    this.csm.lights.forEach((light) => {
-                        light.castShadow = false;
-                    });
-                }
             });
         graphicsFolder.add(this.params, 'FXAA');
 

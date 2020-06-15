@@ -6,7 +6,7 @@ export interface IControllable extends IInputReceiver
 {
     seats: VehicleSeat[];
     position: THREE.Vector3;
-    controllingCharacter: Character;
+    // controllingCharacter: Character;
 
     getMountPoint(character: Character): THREE.Vector3;
     triggerAction(actionName: string, value: boolean): void;

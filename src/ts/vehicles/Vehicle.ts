@@ -12,7 +12,7 @@ import { CollisionGroups } from '../enums/CollisionGroups';
 
 export abstract class Vehicle extends THREE.Object3D
 {
-    public controllingCharacter: Character;
+    // public controllingCharacter: Character;
     public actions: { [action: string]: KeyBinding; } = {};
     public rayCastVehicle: CANNON.RaycastVehicle;
     public seats: VehicleSeat[] = [];
@@ -122,10 +122,10 @@ export abstract class Vehicle extends THREE.Object3D
 
     public onInputChange(): void
     {
-        if (this.actions.exitVehicle.justPressed && this.controllingCharacter !== undefined && this.controllingCharacter.charState.canLeaveVehicles)
+        if (this.actions.exitVehicle.justPressed )
         {
-            this.controllingCharacter.modelContainer.visible = true;
-            this.controllingCharacter.exitVehicle();
+            // this.controllingCharacter.modelContainer.visible = true;
+            // this.controllingCharacter.exitVehicle();
         }
     }
 
@@ -154,14 +154,14 @@ export abstract class Vehicle extends THREE.Object3D
         if (code === 'KeyC' && pressed === true && event.shiftKey === true)
         {
             this.resetControls();
-            this.world.cameraOperator.characterCaller = this.controllingCharacter;
+            // this.world.cameraOperator.characterCaller = this.controllingCharacter;
             this.world.inputManager.setInputReceiver(this.world.cameraOperator);
         }
         else if (code === 'KeyC')
         {
             this.firstPerson = true;
             this.world.cameraOperator.setRadius(0, true);
-            this.controllingCharacter.modelContainer.visible = false;
+            // this.controllingCharacter.modelContainer.visible = false;
         }
         else
         {
@@ -316,10 +316,10 @@ export abstract class Vehicle extends THREE.Object3D
                 this.world.graphicsWorld.attach(wheel.wheelObject);
             });
 
-            this.materials.forEach((mat) =>
-            {
-                world.csm.setupMaterial(mat);
-            });
+            // this.materials.forEach((mat) =>
+            // {
+            //     world.csm.setupMaterial(mat);
+            // });
         }
     }
 
