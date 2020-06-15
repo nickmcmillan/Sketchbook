@@ -21,7 +21,7 @@ import { IWorldEntity } from '../interfaces/IWorldEntity';
 import { Sky } from './Sky';
 import { BoxPhysics } from '../objects/object_physics/BoxPhysics';
 import * as Utils from './Utilities';
-import { TrimeshPhysics } from '../objects/object_physics/TrimeshPhysics';
+// import { TrimeshPhysics } from '../objects/object_physics/TrimeshPhysics';
 
 import { Path } from '../objects/Path';
 import { CollisionGroups } from '../enums/CollisionGroups';
@@ -418,15 +418,15 @@ export class World
 
                                 this.add(SBobj);
                             }
-                            else if (child.userData.type === 'trimesh')
-                            {
-                                let phys = new TrimeshPhysics(child, {});
+                            // else if (child.userData.type === 'trimesh')
+                            // {
+                            //     let phys = new TrimeshPhysics(child, {});
 
-                                let SBobj = new SBObject();
-                                SBobj.setPhysics(phys);
+                            //     let SBobj = new SBObject();
+                            //     SBobj.setPhysics(phys);
 
-                                this.add(SBobj);
-                            }
+                            //     this.add(SBobj);
+                            // }
 
                             child.visible = false;
                         }

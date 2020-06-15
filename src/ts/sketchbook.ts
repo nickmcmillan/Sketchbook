@@ -8,13 +8,13 @@ import { BoxPhysics } from './objects/object_physics/BoxPhysics';
 import { CapsulePhysics } from './objects/object_physics/CapsulePhysics';
 import { ConvexPhysics } from './objects/object_physics/ConvexPhysics';
 import { SpherePhysics } from './objects/object_physics/SpherePhysics';
-import { TrimeshPhysics } from './objects/object_physics/TrimeshPhysics';
+// import { TrimeshPhysics } from './objects/object_physics/TrimeshPhysics';
 export const ObjectPhysics = {
     BoxPhysics,
     CapsulePhysics,
     ConvexPhysics,
     SpherePhysics,
-    TrimeshPhysics,
+    // TrimeshPhysics,
 };
 
 
