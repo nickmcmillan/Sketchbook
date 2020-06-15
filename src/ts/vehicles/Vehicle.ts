@@ -1,4 +1,4 @@
-import { Character } from '../characters/Character';
+// import { Character } from '../characters/Character';
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
 import { World } from '../core/World';
@@ -122,11 +122,12 @@ export abstract class Vehicle extends THREE.Object3D
 
     public onInputChange(): void
     {
-        if (this.actions.exitVehicle.justPressed )
-        {
-            // this.controllingCharacter.modelContainer.visible = true;
-            // this.controllingCharacter.exitVehicle();
-        }
+        // if (this.actions.exitVehicle.justPressed )
+        // {
+        //     // this.controllingCharacter.modelContainer.visible = true;
+        //     // this.controllingCharacter.exitVehicle();
+        // }
+
     }
 
     public resetControls(): void
@@ -250,7 +251,7 @@ export abstract class Vehicle extends THREE.Object3D
         }
     }
 
-    public getMountPoint(character: Character): THREE.Vector3
+    public getMountPoint(): THREE.Vector3
     {
         return this.seats[0].entryPoint.position;
     }

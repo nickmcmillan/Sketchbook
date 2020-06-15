@@ -17,7 +17,6 @@ import * as GUI from '../../lib/utils/dat.gui';
 import * as _ from 'lodash';
 import { InputManager } from './InputManager';
 import { SBObject } from '../objects/SBObject';
-import { Character } from '../characters/Character';
 import { IWorldEntity } from '../interfaces/IWorldEntity';
 import { Sky } from './Sky';
 import { BoxPhysics } from '../objects/object_physics/BoxPhysics';
@@ -29,7 +28,6 @@ import { CollisionGroups } from '../enums/CollisionGroups';
 import { LoadingManager } from './LoadingManager';
 import { Helicopter } from '../vehicles/Helicopter';
 
-import { VehicleSeat } from '../vehicles/VehicleSeat';
 
 export class World
 {
@@ -59,7 +57,7 @@ export class World
     public loadingManager: LoadingManager;
 
     public objects: SBObject[];
-    public characters: Character[];
+    // public characters: Character[];
     public balls: any[];
     public vehicles: any[];
     public paths: {[id: string]: Path} = {};
@@ -189,7 +187,7 @@ export class World
         // Initialization
         this.balls = [];
         this.objects = [];
-        this.characters = [];
+        // this.characters = [];
         this.vehicles = [];
         this.cameraOperator = new CameraOperator(this, this.camera, this.params.Mouse_Sensitivity);
         this.inputManager = new InputManager(this, this.renderer.domElement);
@@ -210,11 +208,11 @@ export class World
         });
 
         // Characters
-        this.characters.forEach((char) =>
-        {
-            char.update(timeStep);
-            char.updateMatrixWorld();
-        });
+        // this.characters.forEach((char) =>
+        // {
+        //     char.update(timeStep);
+        //     char.updateMatrixWorld();
+        // });
 
         this.vehicles.forEach((vehicle) => {
             vehicle.update(timeStep);
@@ -602,15 +600,7 @@ export class World
                     }
                 });
             });
-        debugFolder.add(this.params, 'RayCast_Debug')
-            .onChange((enabled) =>
-            {
-                scope.characters.forEach((char) =>
-                {
-                    if (enabled) char.raycastBox.visible = true;
-                    else char.raycastBox.visible = false;
-                });
-            });
+        
             
         // Debug
         let skyFolder = gui.addFolder('Sky');

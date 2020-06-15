@@ -3,15 +3,6 @@ import '../css/main.css';
 import * as THREEImport from 'three';
 import * as CANNONImport from 'cannon';
 
-import { FollowTarget } from './characters/character_ai/FollowTarget';
-import { FollowPath } from './characters/character_ai/FollowPath';
-import { RandomBehaviour } from './characters/character_ai/RandomBehaviour';
-
-export const CharacterAI = {
-    FollowTarget,
-    FollowPath,
-    RandomBehaviour,
-};
 
 import { BoxPhysics } from './objects/object_physics/BoxPhysics';
 import { CapsulePhysics } from './objects/object_physics/CapsulePhysics';
@@ -26,10 +17,7 @@ export const ObjectPhysics = {
     TrimeshPhysics,
 };
 
-import * as statesLibrary from './characters/character_states/_stateLibrary';
-export const CharacterStates = statesLibrary;
 
-export { Character } from './characters/Character';
 export { KeyBinding } from './core/KeyBinding';
 export { SBObject } from './objects/SBObject';
 export { World } from './core/World';

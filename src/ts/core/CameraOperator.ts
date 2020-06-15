@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { World } from './World';
 import { IInputReceiver } from '../interfaces/IInputReceiver';
 import { KeyBinding } from './KeyBinding';
-import { Character } from '../characters/Character';
+// import { Character } from '../characters/Character';
 import _ = require('lodash');
 
 export class CameraOperator implements IInputReceiver
@@ -28,7 +28,7 @@ export class CameraOperator implements IInputReceiver
 
     public followMode: boolean = false;
 
-    public characterCaller: Character;
+    // public characterCaller: Character;
 
     constructor(world: World, camera: THREE.Camera, sensitivityX: number = 1, sensitivityY: number = sensitivityX * 0.8)
     {
@@ -107,11 +107,7 @@ export class CameraOperator implements IInputReceiver
         // Free camera
         if (code === 'KeyC' && pressed === true && event.shiftKey === true)
         {
-            if (this.characterCaller !== undefined)
-            {
-                this.world.inputManager.setInputReceiver(this.characterCaller);
-                this.characterCaller = undefined;
-            }
+            
         }
         else
         {
