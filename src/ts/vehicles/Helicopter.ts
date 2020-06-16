@@ -23,24 +23,17 @@ export class Helicopter extends Vehicle
             'descend': new KeyBinding('KeyS'),
             'pitchUp': new KeyBinding('ArrowDown'),
             'pitchDown': new KeyBinding('ArrowUp'),
-            'yawLeft': new KeyBinding('KeyQ'),
-            'yawRight': new KeyBinding('KeyE'),
-            'rollLeft': new KeyBinding('ArrowLeft', 'KeyA'),
-            'rollRight': new KeyBinding('ArrowRight', 'KeyD'),
+            'yawLeft': new KeyBinding('KeyA'),
+            'yawRight': new KeyBinding('KeyD'),
+            'rollLeft': new KeyBinding('ArrowLeft'),
+            'rollRight': new KeyBinding('ArrowRight'),
             'exitVehicle': new KeyBinding('KeyF'),
         };
     }
 
     public takeControl(): void
     {
-        if (this.world !== undefined)
-        {
-            this.world.inputManager.setInputReceiver(this);
-        }
-        else
-        {
-            console.warn('Attempting to take control of a character that doesn\'t belong to a world.');
-        }
+      this.world.inputManager.setInputReceiver(this);
     }
 
     public update(timeStep: number): void
@@ -48,7 +41,8 @@ export class Helicopter extends Vehicle
         super.update(timeStep);
         
         // Rotors visuals
-        if (1)
+        const running = true
+        if (running)
         {
             if (this.enginePower < 1) this.enginePower += timeStep * 0.2;
             if (this.enginePower > 1) this.enginePower = 1;
@@ -82,15 +76,15 @@ export class Helicopter extends Vehicle
         // Throttle
         if (heli.actions.ascend.isPressed)
         {
-            body.velocity.x += up.x * 0.15 * this.enginePower;
-            body.velocity.y += up.y * 0.15 * this.enginePower;
-            body.velocity.z += up.z * 0.15 * this.enginePower;
+            body.velocity.x += up.x * 0.1 * this.enginePower;
+            body.velocity.y += up.y * 0.1 * this.enginePower;
+            body.velocity.z += up.z * 0.1 * this.enginePower;
         }
         if (heli.actions.descend.isPressed)
         {
-            body.velocity.x -= up.x * 0.15 * this.enginePower;
-            body.velocity.y -= up.y * 0.15 * this.enginePower;
-            body.velocity.z -= up.z * 0.15 * this.enginePower;
+            body.velocity.x -= up.x * 0.1 * this.enginePower;
+            body.velocity.y -= up.y * 0.1 * this.enginePower;
+            body.velocity.z -= up.z * 0.1 * this.enginePower;
         }
 
         // Vertical stabilization
@@ -128,7 +122,7 @@ export class Helicopter extends Vehicle
             rotStabVelocity.y *= 0.3;
             rotStabVelocity.z *= 0.3;
             rotStabVelocity.w *= 0.3;
-            let rotStabEuler = new THREE.Euler().setFromQuaternion(rotStabVelocity);
+            const rotStabEuler = new THREE.Euler().setFromQuaternion(rotStabVelocity);
             
             body.angularVelocity.x += rotStabEuler.x;
             body.angularVelocity.y += rotStabEuler.y;
@@ -166,15 +160,15 @@ export class Helicopter extends Vehicle
         // Roll
         if (heli.actions.rollLeft.isPressed)
         {
-            body.angularVelocity.x -= forward.x * 0.04 * this.enginePower;
-            body.angularVelocity.y -= forward.y * 0.04 * this.enginePower;
-            body.angularVelocity.z -= forward.z * 0.04 * this.enginePower;
+            body.angularVelocity.x -= forward.x * 0.06 * this.enginePower;
+            body.angularVelocity.y -= forward.y * 0.06 * this.enginePower;
+            body.angularVelocity.z -= forward.z * 0.06 * this.enginePower;
         }
         if (heli.actions.rollRight.isPressed)
         {
-            body.angularVelocity.x += forward.x * 0.04 * this.enginePower;
-            body.angularVelocity.y += forward.y * 0.04 * this.enginePower;
-            body.angularVelocity.z += forward.z * 0.04 * this.enginePower;
+            body.angularVelocity.x += forward.x * 0.06 * this.enginePower;
+            body.angularVelocity.y += forward.y * 0.06 * this.enginePower;
+            body.angularVelocity.z += forward.z * 0.06 * this.enginePower;
         }
 
         // Angular damping
