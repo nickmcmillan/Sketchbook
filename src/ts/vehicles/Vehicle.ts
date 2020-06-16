@@ -4,9 +4,7 @@ import * as CANNON from 'cannon';
 import { World } from '../core/World';
 import _ = require('lodash');
 import { KeyBinding } from '../core/KeyBinding';
-import { VehicleSeat } from './VehicleSeat';
 import { Wheel } from './Wheel';
-import { VehicleDoor } from './VehicleDoor';
 import * as Utils from '../core/Utilities';
 import { CollisionGroups } from '../enums/CollisionGroups';
 
@@ -15,7 +13,6 @@ export abstract class Vehicle extends THREE.Object3D
     // public controllingCharacter: Character;
     public actions: { [action: string]: KeyBinding; } = {};
     public rayCastVehicle: CANNON.RaycastVehicle;
-    public seats: VehicleSeat[] = [];
     public wheels: Wheel[] = [];
     public drive: string;
 
@@ -102,9 +99,6 @@ export abstract class Vehicle extends THREE.Object3D
             this.collision.interpolatedQuaternion.w
         );
 
-        this.seats.forEach((seat: VehicleSeat) => {
-            seat.update(timeStep);
-        });
 
         for (let i = 0; i < this.rayCastVehicle.wheelInfos.length; i++)
         {
@@ -215,45 +209,22 @@ export abstract class Vehicle extends THREE.Object3D
         this.world.cameraOperator.move(deltaX, deltaY);
     }
 
-    public handleMouseWheel(event: WheelEvent, value: number): void
-    {
-        this.world.scrollTheTimeScale(value);
-    }
-
     public inputReceiverInit(): void
     {
         this.collision.allowSleep = false;
-        this.world.cameraOperator.setRadius(3);
+        this.world.cameraOperator.setRadius(6);
     }
 
     public inputReceiverUpdate(timeStep: number): void
     {
-        if (this.firstPerson)
-        {
-            // this.world.cameraOperator.target.set(
-            //     this.position.x + this.camera.position.x,
-            //     this.position.y + this.camera.position.y,
-            //     this.position.z + this.camera.position.z
-            // );
+    
+        // Position camera
+        this.world.cameraOperator.target.set(
+            this.position.x,
+            this.position.y,
+            this.position.z,
+        );
 
-            let temp = new THREE.Vector3().copy(this.camera.position);
-            temp.applyQuaternion(this.quaternion);
-            this.world.cameraOperator.target.copy(temp.add(this.position));
-        }
-        else
-        {
-            // Position camera
-            this.world.cameraOperator.target.set(
-                this.position.x,
-                this.position.y + 0.5,
-                this.position.z
-            );
-        }
-    }
-
-    public getMountPoint(): THREE.Vector3
-    {
-        return this.seats[0].entryPoint.position;
     }
 
     public setPosition(x: number, y: number, z: number): void
@@ -261,36 +232,6 @@ export abstract class Vehicle extends THREE.Object3D
         this.collision.position.x = x;
         this.collision.position.y = y;
         this.collision.position.z = z;
-    }
-
-    public setSteeringValue(val: number): void
-    {
-        this.wheels.forEach((wheel) =>
-        {
-            if (wheel.steering) this.rayCastVehicle.setSteeringValue(val, wheel.rayCastWheelInfoIndex);
-        });
-    }
-
-    public applyEngineForce(force: number): void
-    {
-        this.wheels.forEach((wheel) =>
-        {
-            if (this.drive === wheel.drive || this.drive === 'awd')
-            {
-                this.rayCastVehicle.applyEngineForce(force, wheel.rayCastWheelInfoIndex);
-            }
-        });
-    }
-
-    public setBrake(brakeForce: number, driveFilter?: string): void
-    {
-        this.wheels.forEach((wheel) =>
-        {
-            if (driveFilter === undefined || driveFilter === wheel.drive)
-            {
-                this.rayCastVehicle.setBrake(brakeForce, wheel.rayCastWheelInfoIndex);
-            }
-        });
     }
 
     public addToWorld(world: World): void
@@ -357,45 +298,7 @@ export abstract class Vehicle extends THREE.Object3D
             {
                 if (child.userData.hasOwnProperty('data'))
                 {
-                    if (child.userData.data === 'seat')
-                    {
-                        let seat = new VehicleSeat(child);
-                        seat.vehicle = this;
-
-                        if (child.userData.hasOwnProperty('door_object')) 
-                        {
-                            seat.door = new VehicleDoor(gltf.scene.getObjectByName(child.userData.door_object));
-                        }
-
-                        if (child.userData.hasOwnProperty('door_side')) 
-                        {
-                            seat.doorSide = child.userData.door_side;
-                        }
-                        else
-                        {
-                            console.error('Seat object ' + child + ' has no doorSide property.');
-                        }
-
-                        if (child.userData.hasOwnProperty('entry_point')) 
-                        {
-                            seat.entryPoint = gltf.scene.getObjectByName(child.userData.entry_point);
-                        }
-                        else
-                        {
-                            console.error('Seat object ' + child + ' has no entry point reference property.');
-                        }
-
-                        if (child.userData.hasOwnProperty('seat_type')) 
-                        {
-                            seat.type = child.userData.seat_type;
-                        }
-                        else
-                        {
-                            console.error('Seat object ' + child + ' has no seat type property.');
-                        }
-
-                        this.seats.push(seat);
-                    }
+                    
                     if (child.userData.data === 'camera')
                     {
                         this.camera = child;
@@ -449,9 +352,6 @@ export abstract class Vehicle extends THREE.Object3D
         {
             console.warn('Vehicle ' + typeof(this) + ' has no collision data.');
         }
-        if (this.seats.length === 0)
-        {
-            console.warn('Vehicle ' + typeof(this) + ' has no seats.');
-        }
+        
     }
 }

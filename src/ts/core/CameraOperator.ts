@@ -124,11 +124,6 @@ export class CameraOperator implements IInputReceiver
         }
     }
 
-    public handleMouseWheel(event: WheelEvent, value: number): void
-    {
-        this.world.scrollTheTimeScale(value);
-    }
-
     public handleMouseButton(event: MouseEvent, code: string, pressed: boolean): void
     {
         for (const action in this.actions) {

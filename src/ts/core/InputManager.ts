@@ -12,7 +12,6 @@ export class InputManager
     public boundOnMouseDown: (evt: any) => void;
     public boundOnMouseMove: (evt: any) => void;
     public boundOnMouseUp: (evt: any) => void;
-    public boundOnMouseWheelMove: (evt: any) => void;
     public boundOnPointerlockChange: (evt: any) => void;
     public boundOnPointerlockError: (evt: any) => void;
     public boundOnKeyDown: (evt: any) => void;
@@ -30,7 +29,6 @@ export class InputManager
         this.boundOnMouseDown = (evt) => this.onMouseDown(evt);
         this.boundOnMouseMove = (evt) => this.onMouseMove(evt);
         this.boundOnMouseUp = (evt) => this.onMouseUp(evt);
-        this.boundOnMouseWheelMove = (evt) => this.onMouseWheelMove(evt);
 
         // Pointer lock
         this.boundOnPointerlockChange = (evt) => this.onPointerlockChange(evt);
@@ -43,7 +41,6 @@ export class InputManager
         // Init event listeners
         // Mouse
         this.domElement.addEventListener('mousedown', this.boundOnMouseDown, false);
-        document.addEventListener('wheel', this.boundOnMouseWheelMove, false);
         document.addEventListener('pointerlockchange', this.boundOnPointerlockChange, false);
         document.addEventListener('pointerlockerror', this.boundOnPointerlockError, false);
         
@@ -156,11 +153,4 @@ export class InputManager
         }
     }
 
-    public onMouseWheelMove(event: WheelEvent): void
-    {
-        if (this.inputReceiver !== undefined)
-        {
-            this.inputReceiver.handleMouseWheel(event, event.deltaY);
-        }
-    }
 }

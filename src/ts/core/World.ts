@@ -520,26 +520,6 @@ export class World
         this.graphicsWorld.add( gridHelper );
     }
 
-    public scrollTheTimeScale(scrollAmount: number): void
-    {
-        // Changing time scale with scroll wheel
-        const timeScaleBottomLimit = 0.003;
-        const timeScaleChangeSpeed = 1.3;
-    
-        if (scrollAmount > 0)
-        {
-            this.timeScaleTarget /= timeScaleChangeSpeed;
-            if (this.timeScaleTarget < timeScaleBottomLimit) this.timeScaleTarget = 0;
-        }
-        else
-        {
-            this.timeScaleTarget *= timeScaleChangeSpeed;
-            if (this.timeScaleTarget < timeScaleBottomLimit) this.timeScaleTarget = timeScaleBottomLimit;
-            this.timeScaleTarget = Math.min(this.timeScaleTarget, 1);
-            // if (this.params.Time_Scale > 0.9) this.params.Time_Scale *= timeScaleChangeSpeed;
-        }
-    }
-
     public updateControls(controls: any): void
     {
         let html = '';
