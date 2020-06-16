@@ -4,7 +4,6 @@ import * as CANNON from 'cannon';
 import { World } from '../core/World';
 import _ = require('lodash');
 import { KeyBinding } from '../core/KeyBinding';
-// import { Wheel } from './Wheel';
 import * as Utils from '../core/Utilities';
 import { CollisionGroups } from '../enums/CollisionGroups';
 
@@ -13,7 +12,6 @@ export abstract class Vehicle extends THREE.Object3D
     // public controllingCharacter: Character;
     public actions: { [action: string]: KeyBinding; } = {};
     public rayCastVehicle: CANNON.RaycastVehicle;
-    // public wheels: Wheel[] = [];
     public drive: string;
 
     public camera: any;
@@ -64,12 +62,6 @@ export abstract class Vehicle extends THREE.Object3D
             indexForwardAxis: 2
         });
 
-        // this.wheels.forEach((wheel) =>
-        // {
-        //     handlingSetup.chassisConnectionPointLocal.set(wheel.position.x, wheel.position.y + 0.2, wheel.position.z);
-        //     const index = this.rayCastVehicle.addWheel(handlingSetup);
-        //     wheel.rayCastWheelInfoIndex = index;
-        // });
 
         this.help = new THREE.AxesHelper(2);
     }
@@ -81,7 +73,7 @@ export abstract class Vehicle extends THREE.Object3D
     //     this.modelContainer.add(this.model);
     // }
 
-  public update(timeStep: number): void
+    public update(timeStep: number): void
     {
         this.help.position.copy(Utils.threeVector(this.collision.interpolatedPosition));
         this.help.quaternion.copy(Utils.threeQuat(this.collision.interpolatedQuaternion));
@@ -240,10 +232,6 @@ export abstract class Vehicle extends THREE.Object3D
             this.rayCastVehicle.addToWorld(world.physicsWorld);
             // world.graphicsWorld.add(this.help);
 
-            // this.wheels.forEach((wheel) =>
-            // {
-            //     this.world.graphicsWorld.attach(wheel.wheelObject);
-            // });
 
             // this.materials.forEach((mat) =>
             // {
@@ -290,24 +278,7 @@ export abstract class Vehicle extends THREE.Object3D
                     {
                         this.camera = child;
                     }
-                    // if (child.userData.data === 'wheel')
-                    // {
-                    //     let wheel = new Wheel(child);
-
-                    //     wheel.position = child.position;
-
-                    //     if (child.userData.hasOwnProperty('steering')) 
-                    //     {
-                    //         wheel.steering = (child.userData.steering === 'true');
-                    //     }
-
-                    //     if (child.userData.hasOwnProperty('drive')) 
-                    //     {
-                    //         wheel.drive = child.userData.drive;
-                    //     }
-
-                    //     this.wheels.push(wheel);
-                    // }
+                    
                     if (child.userData.data === 'collision')
                     {
                         if (child.userData.shape === 'box')

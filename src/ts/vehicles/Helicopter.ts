@@ -16,7 +16,15 @@ export class Helicopter extends Vehicle
 
         this.readHelicopterData(gltf);
 
-        this.collision.preStep = (body: CANNON.Body) => { this.physicsPreStep(body, this); };
+        // this.collision.preStep = () => { 
+        //   this.physicsPreStep();
+        //  };
+
+         const preStep = () => {
+           this.physicsPreStep();
+           requestAnimationFrame(preStep)
+         }
+         requestAnimationFrame(preStep)
 
         this.actions = {
             'ascend': new KeyBinding('KeyW'),
@@ -59,8 +67,10 @@ export class Helicopter extends Vehicle
         });
     }
 
-    public physicsPreStep(body: CANNON.Body, heli: Helicopter): void
+    public physicsPreStep(): void
     {
+      const body = this.collision
+
         let quat = new THREE.Quaternion(
             body.quaternion.x,
             body.quaternion.y,
@@ -74,13 +84,13 @@ export class Helicopter extends Vehicle
         let forward = new THREE.Vector3(0, 0, 1).applyQuaternion(quat);
         
         // Throttle
-        if (heli.actions.ascend.isPressed)
+        if (this.actions.ascend.isPressed)
         {
             body.velocity.x += up.x * 0.1 * this.enginePower;
             body.velocity.y += up.y * 0.1 * this.enginePower;
             body.velocity.z += up.z * 0.1 * this.enginePower;
         }
-        if (heli.actions.descend.isPressed)
+        if (this.actions.descend.isPressed)
         {
             body.velocity.x -= up.x * 0.1 * this.enginePower;
             body.velocity.y -= up.y * 0.1 * this.enginePower;
@@ -88,9 +98,9 @@ export class Helicopter extends Vehicle
         }
 
         // Vertical stabilization
-        let gravity = heli.world.physicsWorld.gravity;
+        let gravity = this.world.physicsWorld.gravity;
         let gravityCompensation = new CANNON.Vec3(-gravity.x, -gravity.y, -gravity.z).length();
-        gravityCompensation *= heli.world.physicsFrameTime;
+        gravityCompensation *= this.world.physicsFrameTime;
         gravityCompensation *= 0.98;
         let dot = globalUp.dot(up);
         gravityCompensation *= Math.sqrt(THREE.MathUtils.clamp(dot, 0, 1));
@@ -103,7 +113,7 @@ export class Helicopter extends Vehicle
 
         let vertStab = up.clone();
         vertStab.multiplyScalar((gravityCompensation));
-        vertStab.multiplyScalar(Math.pow(heli.enginePower, 3));
+        vertStab.multiplyScalar(Math.pow(this.enginePower, 3));
         vertStab.add(vertDamping);
 
         body.velocity.x += vertStab.x;
@@ -130,13 +140,13 @@ export class Helicopter extends Vehicle
         }
 
         // Pitch
-        if (heli.actions.pitchUp.isPressed)
+        if (this.actions.pitchUp.isPressed)
         {
             body.angularVelocity.x -= right.x * 0.04 * this.enginePower;
             body.angularVelocity.y -= right.y * 0.04 * this.enginePower;
             body.angularVelocity.z -= right.z * 0.04 * this.enginePower;
         }
-        if (heli.actions.pitchDown.isPressed)
+        if (this.actions.pitchDown.isPressed)
         {
             body.angularVelocity.x += right.x * 0.04 * this.enginePower;
             body.angularVelocity.y += right.y * 0.04 * this.enginePower;
@@ -144,13 +154,13 @@ export class Helicopter extends Vehicle
         }
 
         // Yaw
-        if (heli.actions.yawLeft.isPressed)
+        if (this.actions.yawLeft.isPressed)
         {
             body.angularVelocity.x += up.x * 0.04 * this.enginePower;
             body.angularVelocity.y += up.y * 0.04 * this.enginePower;
             body.angularVelocity.z += up.z * 0.04 * this.enginePower;
         }
-        if (heli.actions.yawRight.isPressed)
+        if (this.actions.yawRight.isPressed)
         {
             body.angularVelocity.x -= up.x * 0.04 * this.enginePower;
             body.angularVelocity.y -= up.y * 0.04 * this.enginePower;
@@ -158,13 +168,13 @@ export class Helicopter extends Vehicle
         }
 
         // Roll
-        if (heli.actions.rollLeft.isPressed)
+        if (this.actions.rollLeft.isPressed)
         {
             body.angularVelocity.x -= forward.x * 0.06 * this.enginePower;
             body.angularVelocity.y -= forward.y * 0.06 * this.enginePower;
             body.angularVelocity.z -= forward.z * 0.06 * this.enginePower;
         }
-        if (heli.actions.rollRight.isPressed)
+        if (this.actions.rollRight.isPressed)
         {
             body.angularVelocity.x += forward.x * 0.06 * this.enginePower;
             body.angularVelocity.y += forward.y * 0.06 * this.enginePower;

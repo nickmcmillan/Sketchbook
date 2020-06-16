@@ -1,8 +1,6 @@
 import * as THREE from 'three';
 import * as CANNON from 'cannon';
 import * as _ from 'lodash';
-import { SimulationFrame } from '../simulation/SimulationFrame';
-import { World } from './World';
 
 export function createCapsuleGeometry(radius: number = 1, height: number = 2, N: number = 32): THREE.Geometry
 {
@@ -226,17 +224,6 @@ export function getGlobalProperties(prefix: string = ''): any[]
     return keyValues; // build the string
 }
 
-export function spring(source: number, dest: number, velocity: number, mass: number, damping: number): SimulationFrame
-{
-    let acceleration = dest - source;
-    acceleration /= mass;
-    velocity += acceleration;
-    velocity *= damping;
-
-    let position = source + velocity;
-
-    return new SimulationFrame(position, velocity);
-}
 
 export function springV(source: THREE.Vector3, dest: THREE.Vector3, velocity: THREE.Vector3, mass: number, damping: number): void
 {
